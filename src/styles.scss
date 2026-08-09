@@ -1,0 +1,126 @@
+:root {
+  /* -- Bureau of Access palette --------------------------------- */
+  --ink-950: #0d1122;
+  --ink-900: #12172b;
+  --ink-800: #1a2140;
+  --ink-700: #232a4d;
+  --ink-600: #2f375f;
+  --hairline: rgba(212, 162, 78, 0.16);
+
+  --text-primary: #edeff7;
+  --text-muted: #9198bd;
+  --text-faint: #626a94;
+
+  --brass: #d4a24e;
+  --brass-strong: #e9bd6f;
+  --brass-dim: rgba(212, 162, 78, 0.14);
+
+  --teal: #3fcdb6;
+  --teal-dim: rgba(63, 205, 182, 0.14);
+
+  --coral: #e2604f;
+  --coral-dim: rgba(226, 96, 79, 0.14);
+
+  --font-display: 'Fraunces', 'Iowan Old Style', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 44px -24px rgba(0, 0, 0, 0.65);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(120% 140% at 12% -10%, #1a2145 0%, var(--ink-900) 46%, var(--ink-950) 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--brass-dim);
+  color: var(--brass-strong);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-600);
+  border-radius: 10px;
+  border: 2px solid var(--ink-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.perforated {
+  position: relative;
+}
+.perforated::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background-image: radial-gradient(circle, var(--ink-950) 1.5px, transparent 1.6px);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  opacity: 0.5;
+}

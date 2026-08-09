@@ -1,0 +1,34 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="seal" aria-hidden="true">SR</div>
+      <div>
+        <p class="brand-name">Bureau of Access</p>
+        <p class="brand-sub mono">SR AUTH CONSOLE</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+        <span class="mark mono">01</span> Dashboard
+      </a>
+      <a routerLink="/roles" routerLinkActive="active" class="nav-link">
+        <span class="mark mono">02</span> Roles
+      </a>
+      <a routerLink="/users" routerLinkActive="active" class="nav-link">
+        <span class="mark mono">03</span> Holders &amp; roles
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <sr-clearance-badge [user]="auth.user()" [initials]="auth.initials()" [compact]="true" />
+      <button class="logout" (click)="logout()">
+        Sign out <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

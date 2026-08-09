@@ -1,0 +1,31 @@
+<sr-auth-layout headline="Identity, on the record." lede="Sign in to manage credentials, roles, and access across the system.">
+  <div class="panel-head">
+    <p class="eyebrow mono">SESSION REQUEST</p>
+    <h2>Welcome back</h2>
+    <p class="sub">Enter your credentials to resume your clearance.</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form" [class.granted]="granted()">
+    <sr-input
+      label="Username"
+      autocomplete="username"
+      formControlName="username"
+      [error]="form.controls.username.touched && form.controls.username.invalid ? 'Username is required' : ''"
+    />
+    <sr-input
+      label="Password"
+      type="password"
+      autocomplete="current-password"
+      formControlName="password"
+      [error]="form.controls.password.touched && form.controls.password.invalid ? 'Password is required' : ''"
+    />
+
+    <sr-button type="submit" [loading]="loading()" [disabled]="granted()">
+      {{ granted() ? 'Access granted ✓' : 'Sign in' }}
+    </sr-button>
+
+    <p class="switch">
+      No badge on file? <a routerLink="/register">Request one</a>
+    </p>
+  </form>
+</sr-auth-layout>

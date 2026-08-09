@@ -1,0 +1,82 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow mono">HOLDER LEDGER</p>
+      <h1>Holders &amp; roles</h1>
+      <p class="sub">Every registered holder and the clearances currently stamped on their badge.</p>
+    </div>
+  </header>
+
+  <section class="panel perforated">
+    <div class="skeleton-block" *ngIf="loading(); else list"></div>
+
+    <ng-template #list>
+      <sr-empty-state
+        *ngIf="!users().length"
+        title="No holders on file"
+        message="Once accounts register, they'll appear here for role assignment."
+      />
+
+      <table class="table" *ngIf="users().length">
+        <thead>
+          <tr>
+            <th>Holder</th>
+            <th>Roles</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users()">
+            <td>
+              <p class="holder-name">{{ user.username || 'Unnamed holder' }}</p>
+              <p class="holder-email mono">{{ user.email || '—' }}</p>
+            </td>
+            <td class="roles-cell">
+              <sr-badge tone="teal" *ngFor="let r of user.roles">{{ roleLabel(r) }}</sr-badge>
+              <span class="none-tag" *ngIf="!user.roles?.length">unassigned</span>
+            </td>
+            <td class="actions-col">
+              <button class="link-btn" (click)="openPanel(user)">Manage roles</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </section>
+
+  <!-- Manage roles drawer -->
+  <div class="overlay" *ngIf="panelUser() as user" (click)="closePanel()">
+    <div class="drawer perforated" (click)="$event.stopPropagation()">
+      <p class="eyebrow mono">MANAGE CLEARANCE</p>
+      <h3>{{ user.username || user.email || 'Holder' }}</h3>
+      <p class="drawer-sub mono">{{ user.email }}</p>
+
+      <div class="current-roles">
+        <p class="section-label">Current roles</p>
+        <div class="role-chips" *ngIf="user.roles?.length; else noneHeld">
+          <span class="chip" *ngFor="let r of user.roles">
+            {{ roleLabel(r) }}
+            <button type="button" (click)="remove(user, r)" [disabled]="busyUserId() === user.id" aria-label="Remove role">×</button>
+          </span>
+        </div>
+        <ng-template #noneHeld><p class="none-tag">No roles assigned yet.</p></ng-template>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="assign()" class="assign-form">
+        <p class="section-label">Assign a role</p>
+        <select formControlName="roleId" class="select">
+          <option value="" disabled>Choose a role…</option>
+          <option *ngFor="let r of availableRoles()" [value]="r.id">{{ r.name }}</option>
+        </select>
+        <sr-button type="submit" [loading]="busyUserId() === user.id" [disabled]="!availableRoles().length">
+          Stamp role
+        </sr-button>
+        <p class="hint-line" *ngIf="!availableRoles().length">This holder already carries every defined role.</p>
+      </form>
+
+      <div class="drawer-close">
+        <sr-button variant="ghost" (click)="closePanel()">Close</sr-button>
+      </div>
+    </div>
+  </div>
+</div>

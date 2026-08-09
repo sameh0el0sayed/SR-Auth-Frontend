@@ -1,0 +1,40 @@
+<sr-auth-layout headline="Every holder starts here." lede="Register a new identity. You'll be issued a badge the moment it's approved.">
+  <div class="panel-head">
+    <p class="eyebrow mono">NEW APPLICATION</p>
+    <h2>Request a badge</h2>
+    <p class="sub">Fill in your details to create a new account.</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <sr-input
+      label="Username"
+      autocomplete="username"
+      formControlName="username"
+      [error]="form.controls.username.touched && form.controls.username.invalid ? 'Between 3 and 100 characters' : ''"
+    />
+    <sr-input
+      label="Email"
+      type="email"
+      autocomplete="email"
+      formControlName="email"
+      [error]="form.controls.email.touched && form.controls.email.invalid ? 'A valid email is required' : ''"
+    />
+    <sr-input
+      label="Password"
+      type="password"
+      autocomplete="new-password"
+      formControlName="password"
+      hint="At least 6 characters"
+      [error]="form.controls.password.touched && form.controls.password.invalid ? 'At least 6 characters' : ''"
+    />
+    <sr-input label="Phone (optional)" type="tel" autocomplete="tel" formControlName="phone" />
+
+    <sr-button type="submit" [loading]="loading()">Create account</sr-button>
+
+    <p class="terms">By continuing you agree this is a demo console for the SR Auth API.</p>
+
+    <p class="switch">
+      Already have a badge? <a routerLink="/login">Sign in</a>
+    </p>
+  </form>
+</sr-auth-layout>

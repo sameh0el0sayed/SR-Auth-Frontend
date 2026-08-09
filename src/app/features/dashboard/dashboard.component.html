@@ -1,0 +1,64 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow mono">OVERVIEW</p>
+      <h1>Good to see you, {{ auth.user()?.username || 'agent' }}</h1>
+      <p class="sub">A snapshot of roles and holders currently on file.</p>
+    </div>
+    <sr-clearance-badge [user]="auth.user()" [initials]="auth.initials()" />
+  </header>
+
+  <div class="stat-row">
+    <div class="stat perforated">
+      <p class="stat-label mono">ROLES DEFINED</p>
+      <p class="stat-value">{{ loading() ? '—' : roles().length }}</p>
+      <a routerLink="/roles" class="stat-link">Manage roles →</a>
+    </div>
+    <div class="stat perforated">
+      <p class="stat-label mono">HOLDERS ON FILE</p>
+      <p class="stat-value">{{ loading() ? '—' : users().length }}</p>
+      <a routerLink="/users" class="stat-link">View holders →</a>
+    </div>
+    <div class="stat perforated">
+      <p class="stat-label mono">UNASSIGNED</p>
+      <p class="stat-value" [class.warn]="unassignedCount > 0">{{ loading() ? '—' : unassignedCount }}</p>
+      <a routerLink="/users" class="stat-link">Review →</a>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <section class="panel perforated">
+      <div class="panel-title">
+        <h3>Recent roles</h3>
+        <a routerLink="/roles" class="see-all">See all</a>
+      </div>
+      <ul class="mini-list" *ngIf="!loading(); else skeleton">
+        <li *ngFor="let r of roles().slice(0, 6)">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="name">{{ r.name }}</span>
+          <span class="id mono">{{ r.id.slice(0, 8) }}</span>
+        </li>
+        <li *ngIf="!roles().length" class="empty-row">No roles defined yet.</li>
+      </ul>
+    </section>
+
+    <section class="panel perforated">
+      <div class="panel-title">
+        <h3>Recent holders</h3>
+        <a routerLink="/users" class="see-all">See all</a>
+      </div>
+      <ul class="mini-list" *ngIf="!loading(); else skeleton">
+        <li *ngFor="let u of users().slice(0, 6)">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="name">{{ u.username || u.email || 'Unnamed holder' }}</span>
+          <span class="id mono">{{ (u.roles?.length || 0) }} role(s)</span>
+        </li>
+        <li *ngIf="!users().length" class="empty-row">No holders on file.</li>
+      </ul>
+    </section>
+  </div>
+
+  <ng-template #skeleton>
+    <div class="skeleton-block"></div>
+  </ng-template>
+</div>

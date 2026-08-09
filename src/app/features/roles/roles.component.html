@@ -1,0 +1,77 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow mono">ACCESS CONTROL</p>
+      <h1>Roles</h1>
+      <p class="sub">Define the clearances that can be stamped onto a holder's badge.</p>
+    </div>
+    <sr-button variant="primary" class="cta" (click)="openCreate()">+ New role</sr-button>
+  </header>
+
+  <section class="panel perforated">
+    <div class="skeleton-block" *ngIf="loading(); else list"></div>
+
+    <ng-template #list>
+      <sr-empty-state
+        *ngIf="!roles().length"
+        title="No roles on file"
+        message="Create the first role to start assigning clearances to holders."
+      >
+        <sr-button variant="ghost" (click)="openCreate()">+ New role</sr-button>
+      </sr-empty-state>
+
+      <table class="table" *ngIf="roles().length">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Role ID</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles()">
+            <td>
+              <sr-badge tone="brass">{{ role.name }}</sr-badge>
+            </td>
+            <td class="mono id-cell">{{ role.id }}</td>
+            <td class="actions-col">
+              <button class="link-btn" (click)="openEdit(role)">Edit</button>
+              <button class="link-btn danger" (click)="confirmDelete(role)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </section>
+
+  <!-- Create / edit drawer -->
+  <div class="overlay" *ngIf="formOpen()" (click)="closeForm()">
+    <div class="drawer perforated" (click)="$event.stopPropagation()">
+      <p class="eyebrow mono">{{ editingRole() ? 'EDIT ROLE' : 'NEW ROLE' }}</p>
+      <h3>{{ editingRole() ? 'Update this role' : 'Stamp a new role' }}</h3>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="drawer-form">
+        <sr-input
+          label="Role name"
+          formControlName="name"
+          hint="2–100 characters, e.g. 'admin' or 'billing-manager'"
+          [error]="form.controls.name.touched && form.controls.name.invalid ? 'Name must be 2–100 characters' : ''"
+        />
+        <div class="drawer-actions">
+          <sr-button type="button" variant="ghost" (click)="closeForm()">Cancel</sr-button>
+          <sr-button type="submit" [loading]="saving()">{{ editingRole() ? 'Save changes' : 'Create role' }}</sr-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <sr-confirm-dialog
+    [open]="!!roleToDelete()"
+    title="Revoke this role?"
+    [message]="'This removes &quot;' + (roleToDelete()?.name || '') + '&quot; permanently. Holders currently carrying it will lose the clearance.'"
+    confirmLabel="Revoke role"
+    [loading]="deleting()"
+    (cancel)="cancelDelete()"
+    (confirm)="performDelete()"
+  />
+</div>
